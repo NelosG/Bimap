@@ -11,32 +11,31 @@ jobs:
         build_type: [Release, Debug, RelWithDebInfo]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: dependencies
-      run: sudo apt install binutils g++ cmake valgrind
-      
-
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/${{ matrix.build_type }}
-      
-    - name: Configure CMake
-      shell: bash
-      working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-
-    - name: Build
-      working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
-      shell: bash
-      run: cmake --build . --config ${{ matrix.build_type }}
-      
-    - if: ${{ matrix.build_type != 'RelWithDebInfo' }}
-      name: Test main
-      working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
-      run: ./main
+      - uses: actions/checkout@v1
+      - name: dependencies
+        run: sudo apt install binutils g++ cmake valgrind
 
 
-    - if: ${{ matrix.build_type == 'RelWithDebInfo' }}
-      name: Valgtind_Test
-      working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
-      run: valgrind --tool=memcheck --gen-suppressions=all --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no --error-exitcode=1 ./main
-      
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{runner.workspace}}/${{ matrix.build_type }}
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+      - name: Build
+        working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
+        shell: bash
+        run: cmake --build . --config ${{ matrix.build_type }}
+
+      - if: ${{ matrix.build_type != 'RelWithDebInfo' }}
+        name: Test main
+        working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
+        run: ./main
+
+
+      - if: ${{ matrix.build_type == 'RelWithDebInfo' }}
+        name: Valgtind_Test
+        working-directory: ${{runner.workspace}}/${{ matrix.build_type }}
+        run: valgrind --tool=memcheck --gen-suppressions=all --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no --error-exitcode=1 ./main

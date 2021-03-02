@@ -43,7 +43,7 @@ struct splay {
   using Node = NodeT<Type, Tag>;
 
 public:
-  splay() { root = nullptr; }
+  splay() : root(nullptr) { }
 
   void set_comp(Comp const &c) noexcept { comp = &c; }
 
@@ -423,9 +423,8 @@ public:
   };
 
   // Создает bimap не содержащий ни одной пары.
-  bimap(CompareLeft cl = CompareLeft(), CompareRight cr = CompareRight()) {
-    compare_left = cl;
-    compare_right = cr;
+  bimap(CompareLeft cl = CompareLeft(), CompareRight cr = CompareRight())
+      : compare_left(cl), compare_right(cr) {
     spl_l.set_comp(compare_left);
     spl_r.set_comp(compare_right);
   }
