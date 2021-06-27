@@ -1,1 +1,3 @@
-## Implementation of homework Bimap_Task within the framework of the C++ course at ITMO university
+## Implementation of homework Bimap_Task as part of a C ++ course at ITMO University
+
+Bimap is a regular map, but you can iterate over both keys and values
